@@ -40,6 +40,8 @@ Likewise for 100% route, with the cursor on shade, press L/R to swap between nor
   
 - Dr.Light's lab cutscenes are skipped.
   
+- NPC dialogue is skipped with the exception of Proto Man's in Turbo and Shade due to skipping them causing issues.
+  
 - Password screen is skipped.
   
 - Castle cutscene when entering a Wily stage is skipped
