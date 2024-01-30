@@ -13,12 +13,43 @@ org hijack_game_start
 org hijack_title_timer
     JSL stop_title_fadeout
     
+org hijack_speech_bubble         ;stop speech bubble from appearing
+    JSL cancel_speech_bubble
+    NOP
+
+org hijack_dialogue              ;then cancel text
+    JSL cancel_dialogue
+    NOP
+
+
+org hijack_intro_bass_cutscene
+    JML force_teleport
+    NOP
+
+org hijack_NPC_cutscenes
+    JSL skip_NPC_cutscenes
+    NOP
+
+org hijack_shade_bass_cutscene
+    JSL skip_NPC_cutscenes
+    NOP
+
+org hijack_bass_death
+    JSL skip_bass_death_cutscenes
+
+org hijack_proto_visit_cutscenes
+    JSL skip_NPC_cutscenes
+    NOP
+
 org hijack_stage_select_init
     JSL clear_boss_and_wpn_vars
     NOP
 
 org hijack_stage_select_confirm
     JSL skip_boss_intro
+
+org hijack_stage_select_shop_input  ;since dialogue has been disabled, shop has to be as well, otherwise softlock
+    NOP #7
 
 org hijack_stage_init
     JSL set_inventory

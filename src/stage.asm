@@ -43,10 +43,8 @@ set_inventory:
     LDA $0B73
     ASL
     PHA
-    ;REP #$20
     LDA #$9C
     STA $0B9A  ;needed, we already get coil in intro but without this, its 0 ammo (why would u even use it there???)
-    ;SEP #$20
     PLA
     REP #$20
     RTL
@@ -65,15 +63,13 @@ set_inventory:
     REP #$20
     BRA set_inventory_done
 
-+:
-    ;REP #$20    
++: 
     ASL A
     DEC
     DEC
     TAX
     LDA #$9C
-    STA !rush_coil  ;always give coil
-    ;XBA        
+    STA !rush_coil  ;always give coil   
     JMP (stages,x)
 
 
@@ -326,8 +322,7 @@ respawn_at_checkpoint:
     LDA $0C53                    ;or during a boss cutscene
     BNE .done
     LDA $A3                      ;check if A+X held
-    AND #$C0
-    CMP #$C0
+    EOR #$C0
     BEQ .respawn
     BRA .done
 
@@ -345,8 +340,7 @@ respawn_at_checkpoint:
 .check_if_released_buttons
     LDA $A1
     AND #$C0
-    CMP #$C0
-    BEQ .done
+    BNE .done
     LDA !spawn_destination
     BRA .update_spawn
 
@@ -395,6 +389,8 @@ respawn_at_checkpoint:
 
 .update_spawn
     STA !spawn_destination
+    INC $0BCA            ;disable damage for mega man, probably unnecessary but avoids potential issues maybe
+    JSL clear_boss_and_wpn_vars
     
 .fadeout:
     REP #$20
@@ -464,4 +460,95 @@ set_wily4_health:
 force_teleport:
     LDA #$10
     JSL $C30E4E
+    RTL
+
+
+;TODO: make a jump table for this mess later
+skip_NPC_cutscenes:
+    SEP #$10
+    LDX !stage_destination
+    CPX #$04
+    BNE .check_cloud 
+    LDA #$00
+    BRA .done
+
+.check_cloud:
+    CPX #$02
+    BNE .check_shade
+    TXA
+    SEP #$30    ;hijacked instruction
+    BRA .done
+
+.check_shade:
+    LDY !room_number
+    CPY #$0E
+    BNE +
+    LDA #$00
+    BRA .done
++:    
+    CPX #$06     
+    BNE .check_wily1
+    LDA #$09
+    INC $02
+    BRA .done
+
+.check_wily1
+    CPX #$0A
+    BNE ++
+    LDA #$03
+    BRA .done
+
+++:
+    LDA #$05
+.done:
+    STA $00F2
+.done2:
+    STZ $3A   ;hijacked instruction
+    RTL
+
+skip_bass_death_cutscenes:
+    LDA #$01
+    STA $00F2
+
+
+    ;hijacked instructions
+    INC $3A
+    INC $3A
+    RTL
+
+cancel_speech_bubble:
+    LDA !stage_destination
+    CMP #$04             ;dont disable speech bubble in turbo
+    BEQ .restore_bubble
+    CMP #$06
+    BNE +
+    LDA !room_number     ;don't disable speech bubble in proto's room in shade
+    CMP #$0E
+    BNE +
+.restore_bubble:
+    LDA #$20
+    STA $00C5
+    BRA .done
++:
+    STZ $00C5
+.done:
+    RTL          ;don't restore hijacked instructions
+
+
+cancel_dialogue:
+    LDA #$0A     ;hijacked instructions
+    STA $2109 
+
+
+    LDA !stage_destination
+    CMP #$04             ;dont disable dialogue in turbo
+    BEQ .done
+    CMP #$06
+    BNE +
+    LDA !room_number     ;dont disable dialogue in proto's room
+    CMP #$0E 
+    BEQ .done
++:
+    JML $C0129B
+.done:
     RTL

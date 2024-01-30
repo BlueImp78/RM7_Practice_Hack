@@ -10,10 +10,18 @@ hijack_title_nmi = $C000B2
 hijack_title_init = $C00A94
 hijack_title_timer = $C00B6E
 hijack_title_audio_toggle = $C00B09
+hijack_speech_bubble = $C3ADFD
+hijack_dialogue = $C0128B
+hijack_intro_bass_cutscene = $C32AE9
+hijack_shade_bass_cutscene = $C32EC7
+hijack_proto_visit_cutscenes = $C2CE3D
+hijack_NPC_cutscenes = $D8AE28
+hijack_bass_death = $D8B0D5
 hijack_stage_select_init = $C03345
 hijack_stage_select_confirm = $C03534
 hijack_stage_select_castle_check = $C03570
 hijack_stage_select_every_frame = $C03824
+hijack_stage_select_shop_input = $C03262
 hijack_stage_init = $C0276F
 hijack_password_init = $C0674F
 hijack_every_frame_on_stg = $C00D10 
@@ -58,7 +66,7 @@ fade_screen = $C039BD   ;unclear
 
 !8robo_avail_flags = $0B7A
 
-!screen_number = $0B7D  ;unclear, investigate more
+!room_number = $0B7D  ;unclear, investigate more
 
 !tank_count = $0BA0
 
@@ -101,3 +109,7 @@ fade_screen = $C039BD   ;unclear
 !bg1_nuke_done = $1FF2
 !selected_route = $1FF4
 !shade_visit = $1FF6           ;00 = normal, 01 = hundo revisit
+!timer_digit1 = $1FF8
+!timer_digit2 = $1FF9
+!timer_digit3 = $1FFA
+!timer_digit4 = $1FFB
