@@ -5,14 +5,14 @@ It has features such as all robot masters + wily stages available from the start
 
 ## How to patch
 
-- Using Lunar Expand (included), select  <strong>24Mbit (3 MB) </strong> and apply it to your vanilla Rockman 7 (J) ROM.
-  
-  After that, apply the .ips patch to your ROM with Lunar IPS (also included).
+- Apply the .ips patch to your vanilla Rockman 7 (J) ROM with the included Lunar IPS program. 
 - Enjoy.
 
 
 ## Features
 
+- Timer to see your room times or boss kill times.
+  
 - The game's intro movie is skipped, and the title screen plays the song you'd hear if you watched it until the end.
   
 - The title screen no longer fades out if you don't press anything for too long.
@@ -53,5 +53,7 @@ Likewise for 100% route, with the cursor on shade, press L/R to swap between nor
 - The teleporters to the boss refights in Wily 4 never close and are always available to be re-entered.
   
 - The last checkpoint in Wily 4 (before final boss) will start you with less health and W.Coil ammo (the amount you'd have in the run) to facilitate practicing Machine QK.
-  
-- After beating Wily Capsule, returns to stage select instead of triggering the ending/credits.
+
+## Known Issues
+
+- The room timer may not display properly (or at all) in areas that use special layer 3 visual effects (like the rain in Cloud Man stage or water in Burst Man stage.
