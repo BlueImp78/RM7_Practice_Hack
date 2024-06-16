@@ -1,7 +1,7 @@
 # Rockman 7 Practice Hack
 
 A practice oriented romhack for RM7 speedruns.
-It has features such as all robot masters + wily stages available from the start, selectable categories,  reloading/advancing through checkpoints, and more. See below for full feature list.
+It has features such as all robot masters + wily stages available from the start, selectable categories, room and boss kill timers, reloading/advancing through checkpoints, and more. See below for full feature list.
 
 ## How to patch
 
