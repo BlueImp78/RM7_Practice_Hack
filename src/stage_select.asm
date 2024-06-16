@@ -77,8 +77,9 @@ clear_boss_and_wpn_vars:
     STZ !rush_adaptor
     STZ !proto_shield
     STZ !obtained_items
-    STZ $0BA3      ;remove beat
-    STZ $0B78      ;clear protoman visit flags
+    STZ $0BA3               ;remove beat
+    STZ $0B78               ;clear protoman visit flags
+    JSR clear_timer_vars    ;also clear timer vars
 
 
     ;hijacked instructions
@@ -86,6 +87,22 @@ clear_boss_and_wpn_vars:
     STA $1DC4
     RTL
 
+
+;probably dont need to clear every single one of them, but better safe than sorry
+clear_timer_vars:
+    STZ !timer_digit_1
+    STZ !timer_digit_2
+    STZ !timer_digit_3
+    STZ !timer_digit_4
+    STZ !timer_seconds
+    STZ !timer_ms
+    STZ !timer_draw_flag
+    STZ !timer_control
+    STZ !timer_clear_flag
+    STZ !display_timer_seconds
+    STZ !display_timer_ms
+    STZ !timer_onscreen_flag
+    RTS
 
 
 ;the SNES'S PPU dev should burn
@@ -323,7 +340,8 @@ check_buttons:
 ;"fun" part
 DMA_to_VRAM:
     REP #$20
-    LDA #%10000000
+    ;LDA #%10000000
+    LDA #$0080
     STA $2115
     LDA !vram_destination
     STA $2116           ;vram address
@@ -336,7 +354,8 @@ DMA_to_VRAM:
     LDA !bytes_to_transfer         
     STA $4335
     SEP #$20
-    LDA.b #%00001000    ;channel 3
+    ;LDA.b #%00001000    ;channel 3
+    LDA.b #$08          ;channel 3
     STA $420B           ;enable DMA and pray it works OH MY FUCKING GOD JUST WORK
     RTS
 

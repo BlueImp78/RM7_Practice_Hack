@@ -8,6 +8,7 @@ org freerom
     incsrc title_screen.asm
     incsrc stage_select.asm
     incsrc stage.asm
+    incsrc room_timer.asm
     incsrc menu.asm
 
 warnpc freerom|$FFFF

@@ -25,6 +25,7 @@ hijack_stage_select_shop_input = $C03262
 hijack_stage_init = $C0276F
 hijack_password_init = $C0674F
 hijack_every_frame_on_stg = $C00D10 
+hijack_stage_nmi = $C10CCA ;$C10CD6
 hijack_exit_level_check = $C04800
 hijack_exit_item = $C04808
 hijack_8robo_fanfare = $C3B29A
@@ -38,6 +39,30 @@ hijack_death_timer_2 = $C118C3
 hijack_pit_death_timer = $C118E5
 hijack_health_init = $C10F28
 hijack_refights_teleport_out = $C07A8C
+hijack_screen_transition_up = $C3D976
+hijack_screen_transition_down = $C3DA56
+hijack_screen_transition_right = $C3D834
+hijack_screen_transition_finished_down = $C3DAEE
+hijack_screen_transition_finished_up = $C3D9F8
+hijack_screen_transition_finished_right = $C3D8C2
+hijack_door_transition = $C3E09F
+hijack_door_transition_2 = $C3F07E
+hijack_door_transition_3 = $C3FBB3
+hijack_door_transition_finished = $C3E1BE
+hijack_door_transition_2_finished = $C37E74
+hijack_door_transition_3_finished = $C3FC9C
+hijack_boss_door_transition = $C37DBA
+hijack_boss_death = $C3B1A1
+hijack_wily1_bass_death = $C30E8B
+hijack_wily1_bass_death_finished = $C30EF1
+hijack_wily1_post_bass_transition = $C110AD
+hijack_fortress_boss_death = $C3C6F2
+hijack_wily4_teleporters_1 = $C0774B
+hijack_wily4_teleporters_2 = $C077E0
+hijack_wily_machine_death = $D8E0E6
+hijack_wily_capsule_death = $D8DAB9
+
+
 
 
 ;routines
@@ -56,6 +81,7 @@ fade_screen = $C039BD   ;unclear
 !screen_brightness = $00AD
 
 !title_screen_timer = $E3
+
 
 !player_health = $0C2E
 !w_coil_ammo = $0B93
@@ -102,14 +128,31 @@ fade_screen = $C039BD   ;unclear
 !new_stage_destination = $0C20  ;00-04: wily 1-4, 04: museum, 05: intro
 !initial_dma_done = $0C22
 !cursor_pos = $0C24
-!text_to_dma = $0C28
-!vram_destination = $0C2A
-!bytes_to_transfer = $0C2C
+!text_to_dma = $0210
+!vram_destination = $0212
+!bytes_to_transfer = $0214
 !logo_skip_done = $1FF0
 !bg1_nuke_done = $1FF2
 !selected_route = $1FF4
 !shade_visit = $1FF6           ;00 = normal, 01 = hundo revisit
-!timer_digit1 = $1FF8
-!timer_digit2 = $1FF9
-!timer_digit3 = $1FFA
-!timer_digit4 = $1FFB
+
+
+;timer stufff
+!timer_digit_1 = $203
+!timer_digit_2 = $204
+!timer_digit_3 = $205
+!timer_digit_4 = $206
+
+!timer_seconds = $1FF8
+!timer_ms = $1FF9
+!timer_draw_flag = $1FFA
+!timer_control = $1FFB
+!timer_clear_flag = $1FFC
+!display_timer_seconds  = $1FFD
+!display_timer_ms = $1FFE
+!timer_onscreen_flag = $1FFF
+
+;temp
+!temp_200 = $200
+!temp_201 = $201
+
