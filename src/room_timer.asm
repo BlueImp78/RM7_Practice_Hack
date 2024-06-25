@@ -1,8 +1,6 @@
 include
 
 room_timer:
-        ;LDA !timer_onscreen_flag
-        ;BNE +
         LDA !timer_draw_flag
         BNE .store_timer  
 +: 
@@ -60,6 +58,7 @@ room_timer:
         LDA #$00        ;hijacked instruction
         RTL
 
+
 check_turbo_or_spring_boss_room:
         LDA !stage_destination
         CMP #$04
@@ -86,7 +85,6 @@ check_turbo_or_spring_boss_room:
 .is_boss_room:
         SEC
         RTS
-
 
 
 hex_to_decimal:
@@ -192,11 +190,13 @@ set_timer_flag_transition:
         INC $0BC1               ;hijacked instruction 
         RTL  
 
+
 set_timer_flag:
         INC !timer_draw_flag
         INC $0BC0               ;hijacked instruction
         INC $0BC1               ;hijacked instruction
         RTL
+
 
 set_timer_flag_door:
         JMP set_timer_flag
@@ -213,14 +213,16 @@ boss_death_draw_timer:
         JSL $C03CBB             ;hijacked instruction
         RTL
 
+
 set_timer_flag_machine_death:
         INC !timer_draw_flag
         JSL $C1083B             ;hijacked instruction
         RTL
 
+
 set_timer_flag_capsule_death:
         INC !timer_draw_flag
-        JSL $C03C59
+        JSL $C03C59             ;hijacked instruction
         RTL
 
 
@@ -232,6 +234,10 @@ wily1_bass_death_draw_timer:
         CMP #$09                ;clear and reset timer instead once capsule fight starts
         BEQ .clear
 +:
+        LDA $0BCA
+        BNE .done
+        LDA $0B7F               ;dont draw timer when riding boss rush elevator
+        BEQ .done
         INC !timer_draw_flag
 .done:
         INC $0BC6               ;hijacked instruction
@@ -254,6 +260,7 @@ wily1_bass_death_clear_timer:
         STZ $0C53               ;hijacked instruction
         RTL        
 
+
 wily1_post_bass_clear_timer:
         LDA !stage_destination
         CMP #$0B
@@ -261,7 +268,9 @@ wily1_post_bass_clear_timer:
         CMP #$0A
         BEQ .wily1
         CMP #$0D
-        BEQ .wily4               
+        BEQ .wily4     
+        CMP #$06
+        BEQ .shade          
 -:
         INC !timer_clear_flag
 .done:
@@ -294,12 +303,22 @@ wily1_post_bass_clear_timer:
         BNE .done 
         BRA -
 
+.shade:
+        LDA !selected_route
+        CMP #$02 
+        BNE -
+        LDA !room_number
+        CMP #$0E
+        BEQ .done               ;don't clear it on protoman death
+        BRA -
+
 
 fortress_boss_death_draw_timer:
         INC !timer_draw_flag
         INC $0BC6               ;hijacked instruction
         LDA #$60                ;hijacked instruction
         RTL
+
 
 screen_transition_finish_clear_timer:
         INC !timer_clear_flag

@@ -1,15 +1,16 @@
 include
 
+
 set_inventory:
         SEP #$20
         LDA #$08
-        STA $2109  ;set normal BG3 address
+        STA $2109                ;set normal BG3 address
         REP #$20
         STZ !timer_seconds
         STZ !display_timer_seconds
         LDA #$0020
         TSB !obtained_items      ;give exit item
-        LDA #$6464               ;give infinite E/W tanks (not really infinite, but who tf is gonna use 100 of them?)
+        LDA #$6464               ;give infinite E/W tanks (not really infinite, but who is gonna use 100 of them?)
         STA !tank_count
         SEP #$20
         STA $0BA2                ;same for S tanks
@@ -39,27 +40,29 @@ set_inventory:
         LDA !stage_destination
         BNE .not_intro
         JSL clear_boss_and_wpn_vars
+        LDA #$20
+        TSB !obtained_items     ;give exit item
         LDA #$01
-        STA $0B74   ;skip intro cutscene
+        STA $0B74               ;skip intro cutscene
         STZ $0B75
         LDA $0B73
         ASL
         PHA
         LDA #$9C
-        STA $0B9A  ;needed, we already get coil in intro but without this, its 0 ammo (why would u even use it there???)
+        STA !rush_coil               ;needed, we already get coil in intro but without this its 0 ammo
         PLA
         REP #$20
         RTL
 
 .not_intro:
-        CMP #$09                 ;check if museum
+        CMP #$09                ;check if museum
         BNE .check_wily
-        STZ $0B74                ;any checkpoint besides 0 there will crash
-        STZ $0B75                ;disable wily stealing gutsman cutscene
+        STZ $0B74               ;any checkpoint besides 0 there will crash
+        STZ $0B75               ;disable wily stealing gutsman cutscene
         BRA +
 
 .check_wily:
-        CMP #$0A                 ;check if wily stage
+        CMP #$0A                ;check if wily stage
         BCC +
         JSR set_all_weapons
         REP #$20
@@ -71,7 +74,7 @@ set_inventory:
         DEC
         TAX
         LDA #$9C
-        STA !rush_coil  ;always give coil   
+        STA !rush_coil          ;always give coil   
         JMP (stages,x)
 
 
@@ -94,7 +97,7 @@ set_inventory_done:
         ASL
         RTL
 
-        ;yandere dev would be proud
+
 freeze:
         STZ !freeze
         LDX !selected_route
@@ -114,7 +117,7 @@ cloud:
         STA !freeze
         STA !burst
         STA !rush_search
-        LDA #$09             ;letters R and H
+        LDA #$09                ;letters R and H
         TSB !obtained_items
 
 .done:
@@ -129,7 +132,7 @@ junk:
         STA !freeze
         STA !burst
         STA !rush_search
-        LDA #$0B           ;letter R, U and H
+        LDA #$0B                ;letter R, U and H
         TSB !obtained_items 
 
 .done:
@@ -150,7 +153,7 @@ turbo:
         CPX #$02
         BNE .done
         STA !rush_adaptor
-        LDA #$8F             ;e balancer
+        LDA #$8F                ;e balancer
         TSB !obtained_items
         BRA +
         
@@ -180,7 +183,7 @@ slash:
         BEQ .done
         STA !rush_adaptor
         STA !proto_shield
-        LDA #$CF              ;punch
+        LDA #$CF                ;punch
         TSB !obtained_items
 .done
         BRL set_inventory_done
@@ -194,7 +197,7 @@ shade:
         STA !rush_search
         STA !rush_jet
         LDX #$03
-        STX $0B78    ;enable protoman fight always
+        STX $0B78               ;enable protoman fight always
         LDX !selected_route
         BEQ .done
         CPX #$02
@@ -204,7 +207,7 @@ shade:
         STA !shade
         STA !turbo
         STA !rush_adaptor
-        LDA #$CF              ;punch
+        LDA #$CF                ;punch
         TSB !obtained_items  
         BRL set_inventory_done
 
@@ -222,7 +225,7 @@ burst:
         CPX #$02
         BNE +
         LDA #$08
-        TSB !obtained_items  ;letter H
+        TSB !obtained_items     ;letter H
         LDA #$9C
         BRA .done
 +:
@@ -258,7 +261,7 @@ spring:
         LDA #$CF
         TSB !obtained_items
         LDA #$84
-        TSB $0BA3        ;give beat
+        TSB $0BA3               ;give beat
 
 
 .done:
@@ -275,7 +278,7 @@ museum:
         CPX #$02
         BNE .done
         STA !rush_adaptor
-        LDA #$0F             ;all letters
+        LDA #$0F                ;all letters
         TSB !obtained_items
 .done:
         BRL set_inventory_done
@@ -294,7 +297,7 @@ set_all_weapons:
         STA !rush_search
         STA !rush_jet
         STA !rush_coil
-        LDX !selected_route      ;check if hundo
+        LDX !selected_route     ;check if hundo
         CPX #$02   
         BNE .done
         STA !proto_shield
@@ -308,24 +311,24 @@ set_all_weapons:
 
 
 skip_weapon_get:
-        SEP #$30        ;hijacked instruction
+        SEP #$30                ;hijacked instruction
         LDA #$10
-        STA $0C53       ;hijacked instruction
+        STA $0C53               ;hijacked instruction
         LDA #$0E
         STA !stage_destination
-        STZ $0B7C       ;stop this from going past 1, if it does and reaches 5, sends to credits lmao
+        STZ $0B7C               ;stop this from going past 1, if it does and reaches 5, sends to credits
         JSL clear_boss_and_wpn_vars
         RTL
         
 
 respawn_at_checkpoint:
         LDA !menu_flag    
-        BNE .done                    ;dont run button check while on menu
-        LDA $0C53                    ;or during a boss cutscene
+        BNE .done                ;dont run button check while on menu
+        LDA $0C53                ;or during a boss cutscene
         BNE .done
-        LDA $A3                      ;check if A+X held
-        AND #$C0        		 ;isolate the bits
-        CMP #$C0			 ;if held together
+        LDA $A3                  ;check if A+X held
+        AND #$C0                 ;isolate the bits
+        CMP #$C0		 ;if held together
         BEQ .respawn
         BRA .done
 
@@ -341,7 +344,7 @@ respawn_at_checkpoint:
 
 .check_if_released_buttons
         LDA $A1
-        AND #$C0
+        BIT #$C0
         BNE .done
         LDA !spawn_destination
         BRA .update_spawn
@@ -381,7 +384,7 @@ respawn_at_checkpoint:
 
 
 .is_wily:
-        CMP #$0C    ;check if wily 3 or 4
+        CMP #$0C                ;check if wily 3 or 4
         BCS --
         PLA
         CMP #$04
@@ -391,7 +394,7 @@ respawn_at_checkpoint:
 
 .update_spawn
         STA !spawn_destination
-        INC $0BCA            ;disable damage for mega man, probably unnecessary but avoids potential issues maybe
+        INC $0BCA              ;disable damage for mega man, probably unnecessary but avoids potential issues, maybe
         JSL clear_boss_and_wpn_vars
         
 .fadeout:
@@ -478,7 +481,7 @@ skip_NPC_cutscenes:
         CPX #$02
         BNE .check_shade
         TXA
-        SEP #$30    ;hijacked instruction
+        SEP #$30                ;hijacked instruction
         BRA .done
 
  .check_shade:
@@ -505,7 +508,7 @@ skip_NPC_cutscenes:
 .done:
         STA $00F2
 .done2:
-        STZ $3A   ;hijacked instruction
+        STZ $3A                 ;hijacked instruction
         RTL
 
 skip_bass_death_cutscene:
@@ -521,11 +524,11 @@ skip_bass_death_cutscene:
 
  cancel_speech_bubble:
         LDA !stage_destination
-        CMP #$04             ;dont disable speech bubble in turbo
+        CMP #$04               ;dont disable speech bubble in turbo
         BEQ .restore_bubble
         CMP #$06
         BNE +
-        LDA !room_number     ;don't disable speech bubble in proto's room in shade
+        LDA !room_number       ;don't disable speech bubble in proto's room in shade
         CMP #$0E
         BNE +
 .restore_bubble:
@@ -535,11 +538,11 @@ skip_bass_death_cutscene:
 +:
         STZ $00C5
 .done:
-        RTL          ;don't restore hijacked instructions
+        RTL                    ;don't restore hijacked instructions
 
 
 cancel_dialogue:
-        LDA #$0A     ;hijacked instructions
+        LDA #$0A               ;hijacked instructions
         STA $2109 
 
 

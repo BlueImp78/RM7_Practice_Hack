@@ -48,6 +48,7 @@ hijack_screen_transition_finished_right = $C3D8C2
 hijack_door_transition = $C3E09F
 hijack_door_transition_2 = $C3F07E
 hijack_door_transition_3 = $C3FBB3
+hijack_door_transition_4 = $C3F228
 hijack_door_transition_finished = $C3E1BE
 hijack_door_transition_2_finished = $C37E74
 hijack_door_transition_3_finished = $C3FC9C
