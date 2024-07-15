@@ -57,3 +57,4 @@ Likewise for 100% route, with the cursor on shade, press L/R to swap between nor
 ## Known Issues
 
 - The room timer may not display properly (or at all) in areas that use special layer 3 visual effects (like the rain in Cloud Man stage or water in Burst Man stage.
+- The screen will turn black for 1 frame when killing Turbo and Shade in the boss rush. Not necessarily an issue but a side effect of a temporary fix.
