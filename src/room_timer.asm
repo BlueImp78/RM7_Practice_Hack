@@ -1,6 +1,8 @@
 include
 
 room_timer:
+        JSL $C1023D     ;hijacked instruction
+        SEP #$20
         LDA !timer_draw_flag
         BNE .store_timer  
 +: 
@@ -52,11 +54,9 @@ room_timer:
 .increase_ms
         INC !timer_ms
 .done:
-        SEP #$20
-        ;JSL $C03AB6     ;hijacked instruction
-        STZ $63         ;hijacked instruction
-        LDA #$00        ;hijacked instruction
-        RTL
+
+        REP #$20
+        RTL     
 
 
 check_turbo_or_spring_boss_room:
@@ -145,6 +145,20 @@ dma_timer:
         STA !bytes_to_transfer
 
         SEP #$20
+
+        ;if in wily 4 turbo or shade room, dma timer with fblank (im losing my shit)
+        LDA !stage_destination
+        CMP #$0D
+        BNE .no_fblank
+        LDA !room_number
+        CMP #$05
+        BEQ .fblank
+        CMP #$07
+        BNE .no_fblank
+.fblank:
+        LDA #$80
+        STA $2100
+.no_fblank:
         LDA !timer_digit_1
         JSR dma_timer_digit
         LDA !timer_digit_2
@@ -261,6 +275,7 @@ wily1_bass_death_clear_timer:
         RTL        
 
 
+;TODO: change label, this is called in a bunch of other spots and not just wily 1
 wily1_post_bass_clear_timer:
         LDA !stage_destination
         CMP #$0B
@@ -270,7 +285,9 @@ wily1_post_bass_clear_timer:
         CMP #$0D
         BEQ .wily4     
         CMP #$06
-        BEQ .shade          
+        BEQ .shade         
+        JSR check_turbo_or_spring_boss_room
+        BCS .done 
 -:
         INC !timer_clear_flag
 .done:
